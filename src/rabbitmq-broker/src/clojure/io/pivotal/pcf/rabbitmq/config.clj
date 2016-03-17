@@ -3,6 +3,7 @@
   (:require [clj-yaml.core :as yaml]
             [clojure.data.json :as json]
             [clojure.string :as string]
+            [taoensso.timbre :as log]
             [validateur.validation :as vdt :refer [validation-set
                                                    presence-of
                                                    inclusion-of
@@ -41,6 +42,7 @@
      (presence-of [:rabbitmq :management_domain] :message missing-msg)
      ;; rabbitmq info
      (presence-of [:rabbitmq :hosts] :message missing-msg)
+     (presence-of [:rabbitmq :regular-user-tags] :message missing-msg)
      (validate-with-predicate [:rabbitmq :hosts] present-and-non-empty? :message "must have at least one entry")
      (presence-of [:rabbitmq :administrator :username] :message missing-msg)
      (presence-of [:rabbitmq :administrator :password] :message missing-msg))))
@@ -159,6 +161,13 @@
    (operator-set-policy-priority final-config))
   ([m]
    (get-in m [:rabbitmq :operator_set_policy :policy_priority] 50)))
+
+(defn regular-user-tags
+  ([]
+    "policymaker,management")
+    ;(regular-user-tags final-config))
+  ([m]
+    (get-in m [:rabbitmq :regular-user-tags])))
 
 (defn management-domain
   ([]
