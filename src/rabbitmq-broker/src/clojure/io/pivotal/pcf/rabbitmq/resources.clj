@@ -36,7 +36,7 @@
 
 ;; policymaker implies management but we include it anyway
 ;; to make it more obvious for ops.
-(def ^{:const true} regular-user-tags (cfg/regular-user-tags))
+(def regular-user-tags (cfg/regular-user-tags))
 ;(def ^{:const true} regular-user-tags "policymaker,management")
 
 (defn add-user

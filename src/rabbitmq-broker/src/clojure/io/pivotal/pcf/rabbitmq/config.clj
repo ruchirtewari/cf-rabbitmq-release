@@ -164,8 +164,7 @@
 
 (defn regular-user-tags
   ([]
-    "policymaker,management")
-    ;(regular-user-tags final-config))
+    (regular-user-tags final-config))
   ([m]
     (get-in m [:rabbitmq :regular-user-tags])))
 
