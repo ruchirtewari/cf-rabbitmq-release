@@ -213,9 +213,7 @@
   ([]
      (node-hosts final-config))
   ([m]
-    (if-let [dns-host (get-in m [:rabbitmq :dns_host])]
-      [dns-host]
-      (vec (get-in m [:rabbitmq :hosts])))))
+      (vec (get-in m [:rabbitmq :hosts]))))
 
 (defn rabbitmq-administrator-uris
   ([]
@@ -223,4 +221,4 @@
   ([m]
      (mapv
        #(format "http://%s:%d" % management-ui-port)
-       (node-hosts m))))
+       (get-in m [:rabbitmq :hosts]))))
