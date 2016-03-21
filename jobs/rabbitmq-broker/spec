@@ -64,6 +64,9 @@ properties:
   rabbitmq-broker.rabbitmq.operator_set_policy.policy_priority:
     description: "Operator policy priority"
     default: 50
+  rabbitmq-broker.rabbitmq.management-ui-port:
+    description: "Port used by service broker"
+    default: "15672"
   rabbitmq-broker.rabbitmq.regular-user-tags:
     description: "New user permission tags"
     default: "management"

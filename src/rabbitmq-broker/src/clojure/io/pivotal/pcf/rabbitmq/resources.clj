@@ -2,8 +2,8 @@
   (:require [langohr.http :as hc]
             [taoensso.timbre :as log]
             [io.pivotal.pcf.rabbitmq.config :as cfg]
-            [io.pivotal.pcf.rabbitmq.gen :as gen]
-            [io.pivotal.pcf.rabbitmq.constants :refer [management-ui-port]])
+            [io.pivotal.pcf.rabbitmq.gen :as gen])
+            ;[io.pivotal.pcf.rabbitmq.constants :refer [management-ui-port]])
   (:import java.net.URLEncoder))
 
 (def ^{:private true} full-permissions
@@ -207,7 +207,7 @@
 
 (defn inject-http-protocol
   [m node-hosts ^String username ^String password tls?]
-  (let [first-node-host (get node-hosts 0)
+  (let [first-node-host (cfg/dns_host)
         k (protocol-key-for "management" tls?)]
     (assoc m k {:uri      (http-api-uri-for username password first-node-host)
                 :uris     (map #(http-api-uri-for username password %) node-hosts)
@@ -215,14 +215,14 @@
                 :password password
                 :host     first-node-host
                 :hosts    node-hosts
-                :port     management-ui-port
+                :port     (cfg/management-ui-port)
                 :path     "/api/"
                 :ssl      false})))
 
 (defn protocol-info-for
   [node-hosts ^String vhost ^String username ^String password protos tls?]
   (-> (reduce (fn [acc [proto port]]
-                (let [first-node-host (get node-hosts 0)
+                (let [first-node-host (cfg/dns_host)
                       username'       (username-for-protocol proto username vhost)
                       proto-tls?      (proto-with-tls? proto)
                       m               {:username username'
@@ -242,7 +242,7 @@
 
 (defn credentials-for
   [node-hosts ^String vhost ^String username ^String password protos tls?]
-  (let [first-node-host (get node-hosts 0)]
+  (let [first-node-host (cfg/dns_host)]
     {:uri           (uri-for (cfg/amqp-scheme) (URLEncoder/encode username) password first-node-host vhost)
      :uris          (map #(uri-for (cfg/amqp-scheme) (URLEncoder/encode username) password % vhost) node-hosts)
      :vhost         vhost

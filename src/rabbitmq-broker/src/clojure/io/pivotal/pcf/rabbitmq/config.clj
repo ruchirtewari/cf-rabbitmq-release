@@ -6,8 +6,8 @@
             [validateur.validation :as vdt :refer [validation-set
                                                    presence-of
                                                    inclusion-of
-                                                   validate-with-predicate]]
-            [io.pivotal.pcf.rabbitmq.constants :refer [management-ui-port]]))
+                                                   validate-with-predicate]]))
+            ;[io.pivotal.pcf.rabbitmq.constants :refer [management-ui-port]]
 
 ;;
 ;; Implementation
@@ -42,6 +42,7 @@
      ;; rabbitmq info
      (presence-of [:rabbitmq :hosts] :message missing-msg)
      (presence-of [:rabbitmq :regular-user-tags] :message missing-msg)
+     (presence-of [:rabbitmq :management-ui-port] :message missing-msg)
      (validate-with-predicate [:rabbitmq :hosts] present-and-non-empty? :message "must have at least one entry")
      (presence-of [:rabbitmq :administrator :username] :message missing-msg)
      (presence-of [:rabbitmq :administrator :password] :message missing-msg))))
@@ -167,6 +168,12 @@
   ([m]
     (get-in m [:rabbitmq :regular-user-tags])))
 
+(defn management-ui-port
+  ([]
+    (management-ui-port final-config))
+  ([m]
+    (get-in m [:rabbitmq :management-ui-port])))
+
 (defn management-domain
   ([]
      (management-domain final-config))
@@ -214,10 +221,16 @@
   ([m]
       (vec (get-in m [:rabbitmq :hosts]))))
 
+(defn dns_host
+  ([]
+   (dns_host final-config))
+  ([m]
+   (get-in m [:rabbit :dns_host])))
+
 (defn rabbitmq-administrator-uris
   ([]
      (rabbitmq-administrator-uris final-config))
   ([m]
      (mapv
-       #(format "http://%s:%d" % management-ui-port)
-       (get-in m [:rabbitmq :hosts]))))
+       #(format "http://%s:%d" % (management-ui-port))
+       (get-in m [:rabbitmq :dns_host]))))
