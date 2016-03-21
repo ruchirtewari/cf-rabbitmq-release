@@ -3,7 +3,6 @@
   (:require [clj-yaml.core :as yaml]
             [clojure.data.json :as json]
             [clojure.string :as string]
-            [taoensso.timbre :as log]
             [validateur.validation :as vdt :refer [validation-set
                                                    presence-of
                                                    inclusion-of
