@@ -24,6 +24,12 @@ properties:
   rabbitmq-server.ssl.fail_if_no_peer_cert:
     description: "Should RabbitMQ server fail if there is no peer cert"
     default: false
+  rabbitmq-server.credit_flow_default_credit:
+    description: "Default credit flow for rabbit cluster"
+    default: {2000,500}
+  rabbitmq-server.vm_memory_high_watermark:
+    description: "Default vm memory high watermark"
+    default: 0.2
 
   rabbitmq-server.plugins:
     description: "RabbitMQ plugins (array of strings)"
